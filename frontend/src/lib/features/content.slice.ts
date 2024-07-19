@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchOriginalContent, processContent } from "../thunks/content";
+import { toast } from "react-toastify";
 
 import { ContentType } from "@/@types/content";
 
@@ -42,6 +43,7 @@ const Content = createSlice({
       .addCase(fetchOriginalContent.rejected, (state, action) => {
         state.errOccurred = true;
         state.loading = false;
+        toast.error("an error occurred");
       })
       .addCase(processContent.pending, (state) => {
         state.loading = true;
@@ -58,6 +60,7 @@ const Content = createSlice({
       .addCase(processContent.rejected, (state, action) => {
         state.errOccurred = true;
         state.loading = false;
+        toast.error("an error occurred");
       });
   },
 });

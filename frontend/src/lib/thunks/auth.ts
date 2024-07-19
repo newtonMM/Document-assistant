@@ -86,7 +86,7 @@ export const logOutService = createAsyncThunk<
   const abortController = new AbortController();
 
   const response = await fetch(`${baseUrl}/user/logout`, {
-    method: "PUT",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },

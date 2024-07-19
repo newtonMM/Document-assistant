@@ -5,12 +5,13 @@ import {
   getAllDocuments,
 } from "../thunks/documents";
 import { DocumentsType } from "@/@types/documents";
+import { toast } from "react-toastify";
 
 interface DocumentState {
   loading: boolean;
   errOccurred: boolean;
   message: string;
-  userId: number | undefined;
+
   documents: DocumentsType[];
 }
 
@@ -18,18 +19,13 @@ const initialState: DocumentState = {
   loading: true,
   errOccurred: false,
   message: "",
-  userId: undefined,
   documents: [],
 };
 
 const DocumentsSlice = createSlice({
   name: "Document-Operations",
   initialState,
-  reducers: {
-    handleLogout(state, action: PayloadAction<string>) {
-      //   state.email = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(uploadDocument.pending, (state) => {
@@ -42,6 +38,7 @@ const DocumentsSlice = createSlice({
       .addCase(uploadDocument.rejected, (state, action) => {
         state.errOccurred = true;
         state.loading = false;
+        toast.error("an error occurred");
       })
       .addCase(getAllDocuments.pending, (state) => {
         state.loading = true;
@@ -58,8 +55,9 @@ const DocumentsSlice = createSlice({
       .addCase(getAllDocuments.rejected, (state, action) => {
         state.errOccurred = true;
         state.loading = false;
+        toast.error("an error occurred");
       });
   },
 });
-export const { handleLogout } = DocumentsSlice.actions;
+
 export default DocumentsSlice.reducer;

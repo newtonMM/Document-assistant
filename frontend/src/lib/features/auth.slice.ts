@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { loginService, signupService, logOutService } from "../thunks/auth";
 import { jwtDecode, JwtPayload } from "jwt-decode";
+import { toast } from "react-toastify";
 
 interface Payload extends JwtPayload {
   userId: number;
@@ -13,6 +14,7 @@ interface AuthState {
   message: string;
   userId: number | undefined;
   isSuccessful: boolean;
+  token: string;
 }
 
 const initialState: AuthState = {
@@ -22,6 +24,7 @@ const initialState: AuthState = {
   message: "",
   userId: undefined,
   isSuccessful: false,
+  token: "",
 };
 
 const AuthenticationSlice = createSlice({
@@ -37,6 +40,7 @@ const AuthenticationSlice = createSlice({
       })
       .addCase(loginService.fulfilled, (state, action) => {
         state.loading = false;
+        state.token = action.payload.token;
         const decoded = jwtDecode<Payload>(action.payload.token);
         state.isAuthenticated = true;
         state.userId = decoded.userId;
@@ -46,6 +50,7 @@ const AuthenticationSlice = createSlice({
         state.errOccurred = true;
         state.loading = false;
         state.isAuthenticated = false;
+        toast.error("an error occurred");
       })
       .addCase(signupService.pending, (state) => {
         state.loading = true;
@@ -59,6 +64,7 @@ const AuthenticationSlice = createSlice({
       .addCase(signupService.rejected, (state, action) => {
         state.errOccurred = true;
         state.isSuccessful = false;
+        toast.error("an error occurred");
       })
       .addCase(logOutService.pending, (state) => {
         state.loading = true;
@@ -73,6 +79,7 @@ const AuthenticationSlice = createSlice({
       .addCase(logOutService.rejected, (state, action) => {
         state.errOccurred = true;
         state.isSuccessful = false;
+        toast.error("an error occurred");
       });
   },
 });
