@@ -9,27 +9,12 @@ Installation
 To install and run this project, follow these steps:
 
 Clone the repository:
-
-bash
-
-Copy code
-
 git clone <https://github.com/newtonMM/Document-assistant.git>
 
 cd into the frontend and backend
-
-Install dependencies:
-
-bash
-
-Copy code
-
-npm install
-
 Set up environment variables:
 
 Create a .env file in the backend and frontend directory and add the necessary environment variables. For example:
-
 backend
 
 DATABASE_URL=your-database-url
@@ -41,13 +26,10 @@ DB_PORT=3306
 JWT_SECRET_KEY=
 PORT=8080
 GEMMA_API_KEY=
-
 grab your GEMINI_KEY here = https://ai.google.dev/aistudio
 
 Fronted
-
 VITE_API_URL=http://localhost:8080/api
-
 Run the application:in the backend directory
 install typescript globally npm install -g typescript
 install dependencies by running npm install
