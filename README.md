@@ -4,6 +4,29 @@ An App that helps the Improves user documents.
 
 ### API
 
+## Installation
+
+**Env Variables**
+
+-create a .env file in the backend directory with the following fields
+HOST=127.0.0.1
+DB_USER=<username>
+DB_PASS=<your_password>
+DB_NAME=document_assistant
+DB_PORT=<db_port>
+JWT_SECRET_KEY=<jwt_secret>
+PORT=8080
+GEMMA_API_KEY=<grab_from_https://ai.google.dev/aistudio>
+
+**Running the app **
+
+- Install typescript globally
+- run npm install in the root directory
+- run tsc commad
+- run npm run dev to start the dev server or npm start to start the app
+-
+- All this should happen at the backend directory
+
 ## User Endpoints
 
 ### Create New User (Sign Up)
@@ -215,3 +238,14 @@ An App that helps the Improves user documents.
   - Sample:
 
 ### FRONTEND
+
+## SETUP
+
+- **ENV VARS**
+
+  - Create an .env file and add
+  - VITE_API_URL=http://localhost:8080/api
+
+- **Install Dependencies**
+- run npm install
+- run npm run dev make sure your backend is running
