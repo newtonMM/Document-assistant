@@ -29,7 +29,7 @@ PORT=8080
 GEMMA_API_KEY=
 grab your GEMINI_KEY here = https://ai.google.dev/aistudio
 
-Fronted
+Frontend
 VITE_API_URL=http://localhost:8080/api
 Run the application:in the backend directory
 install typescript globally npm install -g typescript
@@ -37,7 +37,7 @@ install dependencies by running npm install
 run tsc to generate the dist folder
 run npm run dev to start the development server or npm start to start the application
 
-In the Fronted directory
+In the Frontend directory
 run npm install then npm run dev after adding the base url
 
 Usage
