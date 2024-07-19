@@ -17,7 +17,7 @@ An App that helps the Improves user documents.
 - PORT=8080
 - GEMMA_API_KEY=<grab_from_https://ai.google.dev/aistudio>
 
-**Running the app **
+**Running the app**
 
 - Install typescript globally
 - run npm install in the root directory
