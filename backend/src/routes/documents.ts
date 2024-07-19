@@ -3,7 +3,7 @@ import { uploadDocument, getAllUserDocuments } from "../controllers/document";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
-import isAuth from "../middlwares/isAuth";
+import isAuth from "../middlewares/isAuth";
 
 const router = Router();
 

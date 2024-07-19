@@ -2,15 +2,15 @@ import { Router } from "express";
 import {
   findContent,
   deleteContent,
-  updateContent,
+  saveContent,
   fetchOriginalDocument,
   processContent,
 } from "../controllers/content";
-import isAuth from "../middlwares/isAuth";
+import isAuth from "../middlewares/isAuth";
 
 const router = Router();
 
-router.put("/:contId", isAuth, updateContent);
+router.post("/:contId", isAuth, saveContent);
 router.delete("/:contId", isAuth, deleteContent);
 router.get("/:contId", isAuth, findContent);
 router.get("/original/:docId", isAuth, fetchOriginalDocument);

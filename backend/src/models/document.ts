@@ -66,7 +66,8 @@ export class Document {
                       });
                     }
                     connection.release();
-                    resolve({ results });
+
+                    resolve(docId);
                   });
                 }
               );

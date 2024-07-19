@@ -22,17 +22,17 @@ export const findContent = async (
   }
 };
 
-export const updateContent = async (
+export const saveContent = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { content, document_id } = req.body;
+  const { text, document_id } = req.body;
   const { contId } = req.params;
 
   try {
     const updatedContent = await Content.createContent(
-      content,
+      text,
       parseInt(contId),
       document_id
     );

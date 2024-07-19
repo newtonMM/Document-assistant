@@ -4,13 +4,13 @@ export class Content {
   constructor() {}
 
   static createContent = async (
-    content: string,
+    text: string,
     p_id: number,
     document_id: number
   ) => {
     const query = `INSERT INTO content (text, p_id, document_id) VALUES (?, ?, ?)`;
     return new Promise(async (resolve, reject) => {
-      sql.query(query, [content, p_id, document_id], (err, result) => {
+      sql.query(query, [text, p_id, document_id], (err, result) => {
         if (err) {
           reject(err);
           return;

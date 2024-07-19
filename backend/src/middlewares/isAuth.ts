@@ -1,15 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../models/user";
-interface RequestWithUserId extends Request {
-  userId?: Record<string, any>;
-}
 
-const isAuth = async (
-  req: RequestWithUserId,
-  res: Response,
-  next: NextFunction
-) => {
+/* 
+@desc middleware to always check if a logged in to access protected routes
+
+*/
+const isAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.session.token;
   if (!token) {
     const error = new Error("Not authorized");

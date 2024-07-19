@@ -42,9 +42,8 @@ export const login = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
     const user = (await User.findUserByEmail(email)) as UserProps;
     if (!user) {
       const error = new Error("email not found");
@@ -65,6 +64,9 @@ export const login = async (
       const error = new Error("could not generate token");
       throw error;
     }
+    /* 
+    @desc after successful token generation we initialize a user session and cookie for authentication 
+    */
     req.session.regenerate(async (err) => {
       if (err) {
         res.status(500);
@@ -93,4 +95,18 @@ export const login = async (
   } catch (error) {
     next(error);
   }
+};
+
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  req.session.destroy((err) => {
+    if (err) {
+      res.status(500);
+      throw new Error("Could not log you out.");
+    }
+    res.status(204).json({ message: "See you later!" });
+  });
 };
