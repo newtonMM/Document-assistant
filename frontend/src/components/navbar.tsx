@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,22 +7,42 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { CircleUser, Home, Menu, Package2, Search } from "lucide-react";
+import { CircleUser, Home, Menu, Package2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { handleLogout } from "@/lib/features/auth.slice";
+import { logOutService } from "@/lib/thunks/auth";
 import { useAppDispatch } from "@/lib/hooks/hooks";
+import { makeStore, AppStore } from "@/lib/store/store";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const handleSignOut = () => {
-    console.log("this is clicked");
-    dispatch(handleLogout());
-    navigate("/login");
+
+  const storeRef = useRef<AppStore>();
+  if (!storeRef.current) {
+    // Create the store instance the first time this renders
+    storeRef.current = makeStore();
+  }
+  const handleSignOut = async () => {
+    const resultAction = dispatch(logOutService());
+    const persistor = storeRef.current.__persistor;
+    const result = await resultAction.unwrap();
+    /* 
+    on successful logout we clear the persisted storage
+    */
+    if (result) {
+      persistor.pause();
+      persistor
+        .flush()
+        .then(() => {
+          persistor.purge();
+        })
+        .then(() => {
+          return navigate("/login");
+        });
+    }
   };
   return (
     <div className="w-full">

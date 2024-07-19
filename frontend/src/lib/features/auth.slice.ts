@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loginService, signupService } from "../thunks/auth";
+import { loginService, signupService, logOutService } from "../thunks/auth";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
 interface Payload extends JwtPayload {
@@ -27,11 +27,7 @@ const initialState: AuthState = {
 const AuthenticationSlice = createSlice({
   name: "Authentication",
   initialState,
-  reducers: {
-    handleLogout(state) {
-      state.isAuthenticated = false;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loginService.pending, (state) => {
@@ -63,8 +59,22 @@ const AuthenticationSlice = createSlice({
       .addCase(signupService.rejected, (state, action) => {
         state.errOccurred = true;
         state.isSuccessful = false;
+      })
+      .addCase(logOutService.pending, (state) => {
+        state.loading = true;
+        state.errOccurred = false;
+        state.isSuccessful = false;
+      })
+      .addCase(logOutService.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccessful = true;
+        state.isAuthenticated = false;
+      })
+      .addCase(logOutService.rejected, (state, action) => {
+        state.errOccurred = true;
+        state.isSuccessful = false;
       });
   },
 });
-export const { handleLogout } = AuthenticationSlice.actions;
+
 export default AuthenticationSlice.reducer;

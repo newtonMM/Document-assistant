@@ -77,3 +77,31 @@ export const signupService = createAsyncThunk<
 
   return data;
 });
+
+export const logOutService = createAsyncThunk<
+  string,
+  void,
+  { state: RootState; rejectValue: string }
+>("logout-service", async (_, thunkAPI) => {
+  const abortController = new AbortController();
+
+  const response = await fetch(`${baseUrl}/user/logout`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  if (!response.ok) {
+    var respDetails = await response.json();
+    abortController.abort();
+    return thunkAPI.rejectWithValue(respDetails.message);
+  }
+  const data = await response.json();
+  if (!data) {
+    abortController.abort();
+    return thunkAPI.rejectWithValue("empty response ");
+  }
+
+  return data;
+});

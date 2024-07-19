@@ -23,9 +23,11 @@ import { uploadDocument } from "@/lib/thunks/documents";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const formSchema = z.object({
     document: z
@@ -38,10 +40,10 @@ const Upload = () => {
   });
 
   const handleUpload = async (values: z.infer<typeof formSchema>) => {
-    console.log("this are the values", values.document[0]);
     const file = values.document[0];
     const resultAction = dispatch(uploadDocument(file));
     const result = await resultAction.unwrap();
+    navigate(`/dashboard/improve/${result.id}`);
     console.log("this is the oasis", result);
   };
   const fileRef = form.register("document");

@@ -10,6 +10,12 @@ type Payload = {
   document_id: number;
 };
 
+type SavePayload = {
+  text: string;
+  id: number;
+  document_id: number;
+};
+
 export const processContent = createAsyncThunk<
   string,
   Payload,
@@ -44,16 +50,20 @@ export const processContent = createAsyncThunk<
   return respData;
 });
 
-export const updateContent = createAsyncThunk<
+export const saveContent = createAsyncThunk<
   string,
-  Payload,
+  SavePayload,
   { state: RootState; rejectValue: string }
->("content-processing-service", async (payload, thunkAPI) => {
+>("content-save-service", async (payload, thunkAPI) => {
   const abortController = new AbortController();
 
-  const response = await fetch(`${baseUrl}/content/content_id`, {
-    method: "PUT",
+  const response = await fetch(`${baseUrl}/content/${payload.id}`, {
+    method: "POST",
     body: JSON.stringify(payload),
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
   if (!response.ok) {
     var respDetails = await response.json();
@@ -66,19 +76,23 @@ export const updateContent = createAsyncThunk<
     return thunkAPI.rejectWithValue("empty response ");
   }
 
-  return data.token;
+  return data;
 });
 
 export const deleteContent = createAsyncThunk<
   string,
   Payload,
   { state: RootState; rejectValue: string }
->("content-processing-service", async (payload, thunkAPI) => {
+>("content-delete-service", async (payload, thunkAPI) => {
   const abortController = new AbortController();
 
-  const response = await fetch(`${baseUrl}/content/content_id`, {
+  const response = await fetch(`${baseUrl}/content/${payload.id}`, {
     method: "DELETE",
     body: JSON.stringify(payload),
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
   if (!response.ok) {
     var respDetails = await response.json();
@@ -91,19 +105,20 @@ export const deleteContent = createAsyncThunk<
     return thunkAPI.rejectWithValue("empty response ");
   }
 
-  return data.token;
+  return data;
 });
 
 export const fetchContent = createAsyncThunk<
   string,
   Payload,
   { state: RootState; rejectValue: string }
->("content-processing-service", async (payload, thunkAPI) => {
+>("content-get-service", async (payload, thunkAPI) => {
   const abortController = new AbortController();
 
-  const response = await fetch(`${baseUrl}/content/content_id`, {
+  const response = await fetch(`${baseUrl}/content/${payload.id}`, {
     method: "GET",
     body: JSON.stringify(payload),
+    credentials: "include",
   });
   if (!response.ok) {
     var respDetails = await response.json();
@@ -123,12 +138,13 @@ export const createContent = createAsyncThunk<
   string,
   Payload,
   { state: RootState; rejectValue: string }
->("content-processing-service", async (payload, thunkAPI) => {
+>("content-add-service", async (payload, thunkAPI) => {
   const abortController = new AbortController();
 
   const response = await fetch(`${baseUrl}/content`, {
     method: "POST",
     body: JSON.stringify(payload),
+    credentials: "include",
   });
   if (!response.ok) {
     var respDetails = await response.json();
