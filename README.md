@@ -14,7 +14,8 @@ git clone <https://github.com/newtonMM/Document-assistant.git>
 cd into the frontend and backend
 Set up environment variables:
 
-Create a .env file in the backend and frontend directory and add the necessary environment variables. For example:
+Create a .env file in the backend and frontend directory and add the necessary environment variables.
+For example:
 backend
 
 DATABASE_URL=your-database-url
