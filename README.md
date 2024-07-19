@@ -9,14 +9,14 @@ An App that helps the Improves user documents.
 **Env Variables**
 
 -create a .env file in the backend directory with the following fields
-HOST=127.0.0.1
-DB_USER=<username>
-DB_PASS=<your_password>
-DB_NAME=document_assistant
-DB_PORT=<db_port>
-JWT_SECRET_KEY=<jwt_secret>
-PORT=8080
-GEMMA_API_KEY=<grab_from_https://ai.google.dev/aistudio>
+-HOST=127.0.0.1
+-DB_USER=<username>
+-DB_PASS=<your_password>
+-DB_NAME=document_assistant
+-DB_PORT=<db_port>
+-JWT_SECRET_KEY=<jwt_secret>
+-PORT=8080
+-GEMMA_API_KEY=<grab_from_https://ai.google.dev/aistudio>
 
 **Running the app **
 
@@ -249,3 +249,5 @@ GEMMA_API_KEY=<grab_from_https://ai.google.dev/aistudio>
 - **Install Dependencies**
 - run npm install
 - run npm run dev make sure your backend is running
+
+- **DEMO**
