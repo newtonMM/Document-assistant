@@ -59,7 +59,10 @@ run npm install then npm run dev after adding the base url
 
 Usage
 
-Features
-User authentication (signup, login, logout)
-Content management (save, delete, find, improve content)
-Document management (upload, fetch documents)
+
+https://github.com/user-attachments/assets/99fd2797-96a9-4a26-a148-1aa6776c5218
+
+
+
+
+
