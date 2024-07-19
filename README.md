@@ -47,7 +47,7 @@ An App that helps the Improves user documents.
 
   ```json
   {
-    "phone": "+254702782296",
+    "email": "newty@gmail.com",
     "password": "@ValidPassword123"
   }
   ```
