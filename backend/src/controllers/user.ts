@@ -11,7 +11,6 @@ export const signup = async (
 ) => {
   try {
     const { email, password, username }: UserProps = req.body;
-    console.log("this is the payload", req.body);
     const usernameTaken = await User.findUserByUsername(username);
     if (usernameTaken) {
       console.log(usernameTaken);
@@ -31,7 +30,7 @@ export const signup = async (
       const error = new Error("an error ocurred");
       throw error;
     }
-    res.status(200).json({ message: "user saved successfully" });
+    res.status(201).json({ message: "user saved successfully" });
   } catch (error) {
     next(error);
   }

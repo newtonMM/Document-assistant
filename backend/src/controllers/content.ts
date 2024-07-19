@@ -40,7 +40,7 @@ export const saveContent = async (
       const error = new Error("an error ocurred");
       throw error;
     }
-    res.status(200).json({ message: "content updated successfully" });
+    res.status(201).json({ message: "content saved successfully" });
   } catch (error) {
     next(error);
   }
@@ -71,8 +71,7 @@ export const processContent = async (
   next: NextFunction
 ) => {
   try {
-    const { contId } = req.params;
-    const { content, document_id } = req.body;
+    const { content } = req.body;
 
     if (!content) {
       throw new Error("content is empty");

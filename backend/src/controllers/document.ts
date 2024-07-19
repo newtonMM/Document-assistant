@@ -42,7 +42,7 @@ export const uploadDocument = async (
       throw error;
     }
     res
-      .status(200)
+      .status(201)
       .json({ message: "document saved successfully", id: documentId });
   } catch (error) {
     next(error);
