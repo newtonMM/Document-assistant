@@ -50,6 +50,7 @@ const AuthenticationSlice = createSlice({
         state.errOccurred = true;
         state.loading = false;
         state.isAuthenticated = false;
+        console.log("error", action.payload);
         toast.error("an error occurred");
       })
       .addCase(signupService.pending, (state) => {

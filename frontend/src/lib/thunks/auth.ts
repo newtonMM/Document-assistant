@@ -24,7 +24,6 @@ export const loginService = createAsyncThunk<
   { state: RootState; rejectValue: string }
 >("login-service", async (payload, thunkAPI) => {
   const abortController = new AbortController();
-
   const response = await fetch(`${baseUrl}/user/login`, {
     method: "POST",
     body: JSON.stringify(payload),
@@ -87,9 +86,6 @@ export const logOutService = createAsyncThunk<
 
   const response = await fetch(`${baseUrl}/user/logout`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
     credentials: "include",
   });
   if (!response.ok) {
@@ -102,6 +98,5 @@ export const logOutService = createAsyncThunk<
     abortController.abort();
     return thunkAPI.rejectWithValue("empty response ");
   }
-
   return data;
 });

@@ -4,10 +4,6 @@ import { DocumentsType } from "@/@types/documents";
 
 const baseUrl = import.meta.env.VITE_API_URL;
 
-type Payload = {
-  content: string;
-};
-
 export const getAllDocuments = createAsyncThunk<
   DocumentsType[],
   void,
@@ -42,6 +38,7 @@ export const deleteDocument = createAsyncThunk<
 
   const response = await fetch(`${baseUrl}/documents/${doc_id}`, {
     method: "DELETE",
+    credentials: "include",
   });
   if (!response.ok) {
     var respDetails = await response.json();
@@ -67,6 +64,7 @@ export const fetchDocument = createAsyncThunk<
   const response = await fetch(`${baseUrl}/documents/doc_id`, {
     method: "GET",
     body: JSON.stringify(payload),
+    credentials: "include",
   });
   if (!response.ok) {
     var respDetails = await response.json();

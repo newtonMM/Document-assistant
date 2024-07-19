@@ -122,7 +122,7 @@ const Login = () => {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>Password</FormLabel>
                             <FormControl>
                               <Input type="password" {...field} />
                             </FormControl>

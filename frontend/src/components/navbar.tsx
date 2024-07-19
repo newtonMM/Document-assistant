@@ -37,10 +37,14 @@ const Navbar = () => {
       persistor
         .flush()
         .then(() => {
-          persistor.purge();
+          return persistor.purge();
         })
         .then(() => {
-          return navigate("/login");
+          navigate("/login");
+        })
+        .catch((error: Error) => {
+          console.error("Logout error:", error);
+          navigate("/login");
         });
     }
   };
