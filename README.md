@@ -1,6 +1,6 @@
 # AI Document Assistant Documentation
 
-An App that helps the Improves user documents.
+An App that helps improve user documents.
 
 ### API
 
