@@ -3,6 +3,7 @@ import {
   uploadDocument,
   getAllDocuments,
   getDocumentDetailsAndVersions,
+  deleteDocument,
 } from "../thunks/documents";
 import { DocumentsType } from "@/@types/documents";
 import { toast } from "react-toastify";
@@ -69,6 +70,20 @@ const DocumentsSlice = createSlice({
       })
 
       .addCase(getDocumentDetailsAndVersions.rejected, (state, action) => {
+        state.errOccurred = true;
+        state.loading = false;
+        toast.error(action.payload);
+      })
+      .addCase(deleteDocument.pending, (state) => {
+        state.loading = true;
+        state.errOccurred = false;
+      })
+      .addCase(deleteDocument.fulfilled, (state, action) => {
+        state.loading = false;
+        toast.success("successfully archived the document");
+      })
+
+      .addCase(deleteDocument.rejected, (state, action) => {
         state.errOccurred = true;
         state.loading = false;
         toast.error(action.payload);

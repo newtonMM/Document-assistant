@@ -39,7 +39,7 @@ const Dashboard = () => {
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
                 <CardTitle>
-                  Document Name: {document?.name.split("-").pop()}
+                  Document Name: {document?.name?.split("-").pop()}
                 </CardTitle>
                 <CardDescription>
                   Document content revision history

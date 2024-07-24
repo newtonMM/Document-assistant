@@ -34,8 +34,6 @@ const Enhance = () => {
     (state) => state.Content
   );
 
-  console.log("this is the content", content);
-
   const { id } = useParams();
   const [newContent, setContent] = useState("");
   const [success, setSuccess] = useState(false);
@@ -46,6 +44,7 @@ const Enhance = () => {
     }
     dispatch(fetchContent(parseInt(id)));
   }, []);
+
   useEffect(() => {
     if (processedContent !== "") {
       setContent(processedContent);

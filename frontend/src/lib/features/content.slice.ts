@@ -58,6 +58,7 @@ const Content = createSlice({
         (state, action: PayloadAction<string>) => {
           state.loading = false;
           state.processedContent = action.payload;
+          toast.success("content improved !");
         }
       )
 

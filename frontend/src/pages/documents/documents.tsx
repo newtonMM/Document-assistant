@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Sparkles, Trash2, EyeIcon } from "lucide-react";
-import { getAllDocuments } from "@/lib/thunks/documents";
+import { deleteDocument, getAllDocuments } from "@/lib/thunks/documents";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/hooks";
 import { DocumentsType } from "@/@types/documents";
 import { Link } from "react-router-dom";
@@ -25,8 +25,10 @@ const documents = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getAllDocuments());
-  }, []);
-  console.log("documents", documents);
+  }, [dispatch]);
+  const handleDelete = (id: number) => {
+    dispatch(deleteDocument(id));
+  };
   return (
     <div className="w-full p-4">
       <Card>
@@ -66,7 +68,10 @@ const documents = () => {
                     </TableCell>
                     <TableCell className="">
                       <div className="flex gap-2 items-center">
-                        <Trash2 className="h-6 w-6 cursor-pointer" />
+                        <Trash2
+                          onClick={() => handleDelete(document.id)}
+                          className="h-6 w-6 cursor-pointer"
+                        />
                         <Link to={`/dashboard/document/${document.id}`}>
                           <EyeIcon className="h-6 w-6" />
                         </Link>
