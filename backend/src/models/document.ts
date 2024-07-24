@@ -95,7 +95,7 @@ export class Document {
   };
 
   static findUserDocuments = async (id: number) => {
-    const query = `SELECT u.id, u.username, d.* FROM users u JOIN documents d ON u.id = d.user_id  WHERE u.id = ${id}`;
+    const query = `SELECT u.id, u.username, d.* FROM users u JOIN documents d ON u.id = d.user_id  WHERE u.id = ${id} AND d.status != 'archived'`;
     return new Promise((resolve, reject) => {
       sql.db.query(query, (err, results) => {
         if (err) {

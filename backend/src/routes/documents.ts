@@ -3,6 +3,7 @@ import {
   uploadDocument,
   getAllUserDocuments,
   fetchAllContentVersion,
+  deleteDocuments,
 } from "../controllers/document";
 import multer from "multer";
 import fs from "fs";
@@ -41,7 +42,7 @@ const upload = multer({ storage: storage });
 
 router.post("/upload", isAuth, upload.single("document"), uploadDocument);
 router.get("/", isAuth, getAllUserDocuments);
-router.delete("/:id", isAuth);
+router.delete("/:id", isAuth, deleteDocuments);
 router.get("/versions/:docId", isAuth, fetchAllContentVersion);
 
 export default router;

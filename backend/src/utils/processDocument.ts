@@ -10,9 +10,14 @@ export const processDocument = async (content: string) => {
     }
     const genAI = new GoogleGenerativeAI(process.env.GEMMA_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    const prompt =
-      "You are a document editor. Identify errors and suggest improvements. the output should be in markdown format";
 
+    const prompt = `This is a piece of text extracted from a file. Please analyze it a generate an improved version fixing grammatical errors and spelling .Please format your response as markdown so that I can convert the output to html. `;
+
+    /* 
+    
+    
+    
+    */
     const result = await model.generateContent([prompt, content]);
     const response = await result.response;
     const text = response.text();
