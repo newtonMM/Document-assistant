@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 import { Document } from "../models/document";
 import extractTextFromFile from "../utils/extractText";
+import { CustomError } from "../utils/error";
 
 export const uploadDocument = async (
   req: Request,
@@ -16,16 +17,25 @@ export const uploadDocument = async (
     const name = req.file?.filename;
 
     if (!name) {
-      const error = new Error("missing file name");
+      const error = new CustomError({
+        message: "missing file name",
+        code: 400,
+      });
       throw error;
     }
     if (!userId) {
-      const error = new Error("please login");
+      const error = new CustomError({
+        message: "user details missing",
+        code: 403,
+      });
       throw error;
     }
     const docPath = req.file?.path;
     if (!docPath) {
-      const error = new Error("invalid file path");
+      const error = new CustomError({
+        message: "could not save the document",
+        code: 500,
+      });
       throw error;
     }
     /* 
@@ -38,7 +48,7 @@ export const uploadDocument = async (
     const documentId = (await document.save()) as number;
 
     if (!documentId) {
-      const error = new Error("an error ocurred");
+      const error = new CustomError({ message: "Failed to save", code: 500 });
       throw error;
     }
     res
@@ -60,7 +70,7 @@ export const getAllUserDocuments = async (
     */
     const userId = req.session.userId;
     if (!userId) {
-      throw new Error("user is not logged ");
+      throw new CustomError({ message: "User details missing", code: 403 });
     }
     const documents = await Document.findUserDocuments(userId);
     res.status(200).json({ documents });
@@ -77,11 +87,11 @@ export const deleteDocuments = async (
   try {
     const { id } = req.params;
     if (!id) {
-      throw new Error("attach an id");
+      throw new CustomError({ message: "Document not found", code: 404 });
     }
-    const deleteSuccessful = await Document.deleteDocuments(id);
+    const deleteSuccessful = await Document.archiveDocument(id);
     if (!deleteSuccessful) {
-      throw new Error("delete failed");
+      throw new CustomError({ message: "could not archive", code: 500 });
     }
     res.status(200).json({ message: "delete successful" });
   } catch (error) {

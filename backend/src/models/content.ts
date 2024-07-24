@@ -69,7 +69,28 @@ export class Content {
           return;
         }
         if (Array.isArray(results) && results.length === 0) {
-          console.log("this are the results", results);
+          return resolve(false);
+        }
+        if (Array.isArray(results)) {
+          return resolve(results[0]);
+        }
+        resolve(results);
+      });
+    }).catch((err) => {
+      const error = { code: err.code, failed: true, message: err.sqlMessage };
+      return error;
+    });
+  };
+
+  static fetchAllContentVersion = async (id: number) => {
+    const query = `SELECT * FROM content WHERE document_id = "${id}"`;
+    return new Promise((resolve, reject) => {
+      sql.db.query(query, (err, results) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        if (Array.isArray(results) && results.length === 0) {
           return resolve(false);
         }
         if (Array.isArray(results)) {

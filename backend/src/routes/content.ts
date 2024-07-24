@@ -5,6 +5,7 @@ import {
   saveContent,
   fetchOriginalDocument,
   processContent,
+  fetchAllContentVersion,
 } from "../controllers/content";
 import isAuth from "../middlewares/isAuth";
 
@@ -15,5 +16,6 @@ router.delete("/:contId", isAuth, deleteContent);
 router.get("/:contId", isAuth, findContent);
 router.get("/original/:docId", isAuth, fetchOriginalDocument);
 router.post("/:contId/improve", isAuth, processContent);
+router.get("/versions/:id", isAuth, fetchAllContentVersion);
 
 export default router;

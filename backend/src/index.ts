@@ -8,6 +8,7 @@ import contentRoutes from "./routes/content";
 import session from "express-session";
 import sessionStore from "./models/session";
 import cors from "cors";
+import { CustomError } from "./utils/error";
 
 dotenv.config();
 const app = express();
@@ -43,16 +44,30 @@ app.use(
     },
   })
 );
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-  console.log("from server from server", error);
-  const statusCode = 500;
-  const message = "an error occured";
-  res.status(statusCode).json({ message: message });
-});
 
 app.use("/api/user", userRoutes);
 app.use("/api/documents", docRoutes);
 app.use("/api/content", contentRoutes);
+
+app.use(
+  (error: CustomError, req: Request, res: Response, next: NextFunction) => {
+    var statusCode;
+    var message;
+
+    if (!error.code) {
+      statusCode = 500;
+    } else {
+      statusCode = error.code;
+    }
+    if (!error.message) {
+      message = "something went wrong";
+    } else {
+      message = error.message;
+    }
+
+    res.status(statusCode).json({ message: message });
+  }
+);
 
 app.listen(port || 8000, () => {
   console.log("we are server is running at port", port);

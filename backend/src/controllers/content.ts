@@ -2,6 +2,7 @@ import { NextFunction, Response, Request } from "express";
 import { Content } from "../models/content";
 import { processDocument } from "../utils/processDocument";
 import showdown from "showdown";
+import { CustomError } from "../utils/error";
 
 export const findContent = async (
   req: Request,
@@ -13,7 +14,10 @@ export const findContent = async (
   try {
     const cont = await Content.findContent(parseInt(contId));
     if (!cont) {
-      const error = new Error("an error ocurred");
+      const error = new CustomError({
+        message: "Entry does not exist",
+        code: 404,
+      });
       throw error;
     }
     res.status(200).json({ message: "success", content: cont });
@@ -37,7 +41,10 @@ export const saveContent = async (
       document_id
     );
     if (!updatedContent) {
-      const error = new Error("an error ocurred");
+      const error = new CustomError({
+        message: "Failed to save this version",
+        code: 424,
+      });
       throw error;
     }
     res.status(201).json({ message: "content saved successfully" });
@@ -56,7 +63,7 @@ export const deleteContent = async (
   try {
     const deletedSuccessfully = await Content.deleteContent(parseInt(contId));
     if (!deletedSuccessfully) {
-      const error = new Error("an error ocurred");
+      const error = new CustomError({ message: "failed", code: 424 });
       throw error;
     }
     res.status(200).json({ message: "delete successful" });
@@ -74,17 +81,20 @@ export const processContent = async (
     const { content } = req.body;
 
     if (!content) {
-      throw new Error("content is empty");
+      throw new CustomError({ message: "content is empty", code: 400 });
     }
     const processedContent = await processDocument(content);
     if (!processedContent) {
-      throw new Error("content is empty");
+      throw new CustomError({ message: "No output", code: 424 });
     }
-    console.log("this is", processedContent);
+
     const converter = new showdown.Converter();
     const contentInHtml = converter.makeHtml(processedContent);
     if (!contentInHtml) {
-      const error = new Error("an error ocurred");
+      const error = new CustomError({
+        message: "Could not convert to a read able format",
+        code: 424,
+      });
       throw error;
     }
     res.status(200).json(contentInHtml);
@@ -101,9 +111,29 @@ export const fetchOriginalDocument = async (
   try {
     const { docId } = req.params;
     if (!docId) {
-      throw new Error(" ");
+      throw new CustomError({ message: "Failed", code: 400 });
     }
     const document = await Content.fetchOriginalContent(parseInt(docId));
+    res.status(200).json(document);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const fetchAllContentVersion = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { docId } = req.params;
+    if (!docId) {
+      throw new CustomError({ message: "Failed", code: 400 });
+    }
+    const document = await Content.fetchAllContentVersion(parseInt(docId));
+    if (!document) {
+      throw new CustomError({ message: "NOT FOUND", code: 404 });
+    }
     res.status(200).json(document);
   } catch (error) {
     next(error);

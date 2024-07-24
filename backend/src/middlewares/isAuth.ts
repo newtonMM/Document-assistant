@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { User } from "../models/user";
+import { CustomError } from "../utils/error";
 
 /* 
 @desc middleware to always check if a logged in to access protected routes
@@ -9,7 +9,7 @@ import { User } from "../models/user";
 const isAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.session.token;
   if (!token) {
-    const error = new Error("Not authorized");
+    const error = new CustomError({ message: "not logged in", code: 403 });
     throw error;
   }
   let decodedToken;
@@ -19,7 +19,7 @@ const isAuth = async (req: Request, res: Response, next: NextFunction) => {
     throw error;
   }
   if (!decodedToken) {
-    const error = new Error("Not authenticated");
+    const error = new CustomError({ message: "Invalid token", code: 403 });
     throw error;
   }
   next();

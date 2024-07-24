@@ -3,6 +3,7 @@ import { User } from "../models/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { UserProps } from "../@types/User/Index";
+import { CustomError } from "../utils/error";
 
 export const signup = async (
   req: Request,
@@ -14,12 +15,18 @@ export const signup = async (
     const usernameTaken = await User.findUserByUsername(username);
     if (usernameTaken) {
       console.log(usernameTaken);
-      const error = new Error("username already exist");
+      const error = new CustomError({
+        message: "Username already taken",
+        code: 400,
+      });
       throw error;
     }
     const emailExist = await User.findUserByEmail(email);
     if (emailExist) {
-      const error = new Error("email already exist");
+      const error = new CustomError({
+        message: "Email already exist",
+        code: 400,
+      });
       throw error;
     }
     const salt = await bcrypt.genSalt(10);
@@ -27,7 +34,7 @@ export const signup = async (
     const user = new User(email, hashedPw, username);
     const userSaved = await user.save();
     if (!userSaved) {
-      const error = new Error("an error ocurred");
+      const error = new CustomError({ message: "Failed!", code: 500 });
       throw error;
     }
     res.status(201).json({ message: "user saved successfully" });
@@ -45,12 +52,18 @@ export const login = async (
     const { email, password } = req.body;
     const user = (await User.findUserByEmail(email)) as UserProps;
     if (!user) {
-      const error = new Error("email not found");
+      const error = new CustomError({
+        message: "incorrect username or password",
+        code: 400,
+      });
       throw error;
     }
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
-      const error = new Error("you have entered the wrong password");
+      const error = new CustomError({
+        message: "Incorrect password",
+        code: 403,
+      });
       throw error;
     }
     const token = jwt.sign(
@@ -60,7 +73,10 @@ export const login = async (
       process.env.JWT_SECRET_KEY!
     );
     if (!token) {
-      const error = new Error("could not generate token");
+      const error = new CustomError({
+        message: "could not generate the user token",
+        code: 500,
+      });
       throw error;
     }
     /* 
@@ -68,8 +84,10 @@ export const login = async (
     */
     req.session.regenerate(async (err) => {
       if (err) {
-        res.status(500);
-        throw new Error("Session regeneration failed.");
+        const error = new CustomError({
+          message: "could not create the user session",
+          code: 500,
+        });
       }
 
       // Store user in session
@@ -103,8 +121,7 @@ export const logout = async (
 ) => {
   req.session.destroy((err) => {
     if (err) {
-      res.status(500);
-      throw new Error("Could not log you out.");
+      const error = new CustomError({ message: "Log out failed", code: 500 });
     }
     res.status(204).json({ message: "See you later!" });
   });

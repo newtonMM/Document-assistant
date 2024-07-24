@@ -78,21 +78,8 @@ export class Document {
     });
   }
 
-  static updateDocument = async (content: string, id: number) => {
-    const query = `UPDATE content SET text= ? WHERE document_id=${id}`;
-    return new Promise(async (resolve, reject) => {
-      sql.query(query, [content], (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(result);
-      });
-    });
-  };
-
-  static deleteDocuments = async (id: string) => {
-    const query = `DELETE FROM documents WHERE id = "${id}"`;
+  static archiveDocument = async (id: string) => {
+    const query = `UPDATE documents SET status = 'archived' WHERE id = "${id}"`;
     return new Promise((resolve, reject) => {
       sql.db.query(query, (err, results) => {
         if (err) {
