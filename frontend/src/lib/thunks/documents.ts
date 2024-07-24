@@ -25,7 +25,7 @@ export const getAllDocuments = createAsyncThunk<
     abortController.abort();
     return thunkAPI.rejectWithValue("empty response ");
   }
-  console.log("this is the data", data);
+
   return data.documents;
 });
 
@@ -96,15 +96,31 @@ export const uploadDocument = createAsyncThunk<
   });
   if (!response.ok) {
     var respDetails = await response.json();
+    console.log("this is the resp", respDetails.message);
     abortController.abort();
     return thunkAPI.rejectWithValue(respDetails.message);
   }
   const data = await response.json();
+  return data;
+});
 
-  if (!data) {
+export const getDocumentDetailsAndVersions = createAsyncThunk<
+  [],
+  number,
+  { state: RootState; rejectValue: string }
+>("get-document-details-service", async (id, thunkAPI) => {
+  const abortController = new AbortController();
+
+  const response = await fetch(`${baseUrl}/documents/versions/${id}`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    var respDetails = await response.json();
     abortController.abort();
-    return thunkAPI.rejectWithValue("empty response ");
+    return thunkAPI.rejectWithValue(respDetails.message);
   }
+  const data = await response.json();
 
   return data;
 });

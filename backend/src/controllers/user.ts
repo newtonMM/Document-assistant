@@ -53,7 +53,7 @@ export const login = async (
     const user = (await User.findUserByEmail(email)) as UserProps;
     if (!user) {
       const error = new CustomError({
-        message: "incorrect username or password",
+        message: "incorrect email or password",
         code: 400,
       });
       throw error;

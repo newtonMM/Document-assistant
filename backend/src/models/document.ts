@@ -48,10 +48,10 @@ export class Document {
               }
               const docId = results.insertId;
 
-              connection.query(
+              connection.query<ResultSetHeader>(
                 contQuery,
                 [docId, this.text, this.p_id],
-                (err, results) => {
+                (err, results, fields) => {
                   if (err) {
                     connection.rollback(() => {
                       connection.release();
@@ -67,7 +67,7 @@ export class Document {
                     }
                     connection.release();
 
-                    resolve(docId);
+                    resolve(results.insertId);
                   });
                 }
               );
@@ -95,7 +95,7 @@ export class Document {
   };
 
   static findUserDocuments = async (id: number) => {
-    const query = `SELECT u.*, d.*, c.* FROM users u JOIN documents d ON u.id = d.user_id JOIN content c ON d.id = c.document_id WHERE u.id = ${id}`;
+    const query = `SELECT u.id, u.username, d.* FROM users u JOIN documents d ON u.id = d.user_id  WHERE u.id = ${id}`;
     return new Promise((resolve, reject) => {
       sql.db.query(query, (err, results) => {
         if (err) {
@@ -129,6 +129,42 @@ export class Document {
           return resolve(false);
         }
         resolve(results);
+      });
+    }).catch((err) => {
+      const error = { code: err.code, failed: true, message: err.sqlMessage };
+      return error;
+    });
+  };
+
+  static fetchAllDocumentVersions = async (id: number) => {
+    const query = `SELECT 
+    c.id AS cont_id,
+    c.text AS text,
+    c.p_id AS p_id,
+    c.created_at AS date,
+    d.id AS doc_id,
+    d.upload_date,
+    d.name AS name,
+    u.id AS user_id,
+    u.username AS username
+    FROM 
+    content c
+    LEFT JOIN 
+    documents d ON c.document_id = d.id
+    LEFT JOIN 
+    users u ON d.user_id = u.id
+    WHERE 
+    c.document_id = "${id}"
+`;
+    return new Promise((resolve, reject) => {
+      sql.db.query(query, (err, results) => {
+        if (err) {
+          reject(err);
+        }
+        if (Array.isArray(results)) {
+          resolve(results);
+        }
+        resolve([results]);
       });
     }).catch((err) => {
       const error = { code: err.code, failed: true, message: err.sqlMessage };

@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { uploadDocument, getAllUserDocuments } from "../controllers/document";
+import {
+  uploadDocument,
+  getAllUserDocuments,
+  fetchAllContentVersion,
+} from "../controllers/document";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
@@ -38,5 +42,6 @@ const upload = multer({ storage: storage });
 router.post("/upload", isAuth, upload.single("document"), uploadDocument);
 router.get("/", isAuth, getAllUserDocuments);
 router.delete("/:id", isAuth);
+router.get("/versions/:docId", isAuth, fetchAllContentVersion);
 
 export default router;

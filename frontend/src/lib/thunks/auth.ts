@@ -78,7 +78,7 @@ export const signupService = createAsyncThunk<
 });
 
 export const logOutService = createAsyncThunk<
-  string,
+  void,
   void,
   { state: RootState; rejectValue: string }
 >("logout-service", async (_, thunkAPI) => {
@@ -88,15 +88,10 @@ export const logOutService = createAsyncThunk<
     method: "GET",
     credentials: "include",
   });
+
   if (!response.ok) {
     var respDetails = await response.json();
     abortController.abort();
     return thunkAPI.rejectWithValue(respDetails.message);
   }
-  const data = await response.json();
-  if (!data) {
-    abortController.abort();
-    return thunkAPI.rejectWithValue("empty response ");
-  }
-  return data;
 });

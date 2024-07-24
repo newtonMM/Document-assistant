@@ -8,6 +8,7 @@ import Dashboard from "@/pages/dashboard/dashboard";
 import Upload from "@/pages/upload/upload";
 import Documents from "@/pages/documents/documents";
 import Improve from "@/pages/improve/improve";
+import Document from "@/pages/document/document";
 const MainNavigation = () => {
   const router = createBrowserRouter([
     {
@@ -26,6 +27,7 @@ const MainNavigation = () => {
         { path: "signup", element: <SignUp /> },
         { path: "upload", element: <Upload /> },
         { path: "documents", element: <Documents /> },
+        { path: "document/:id", element: <Document /> },
         { path: "improve/:id", element: <Improve /> },
       ],
     },

@@ -50,8 +50,7 @@ const AuthenticationSlice = createSlice({
         state.errOccurred = true;
         state.loading = false;
         state.isAuthenticated = false;
-        console.log("error", action.payload);
-        toast.error("an error occurred");
+        toast.error(action.payload);
       })
       .addCase(signupService.pending, (state) => {
         state.loading = true;
@@ -65,7 +64,7 @@ const AuthenticationSlice = createSlice({
       .addCase(signupService.rejected, (state, action) => {
         state.errOccurred = true;
         state.isSuccessful = false;
-        toast.error("an error occurred");
+        toast.error(action.payload);
       })
       .addCase(logOutService.pending, (state) => {
         state.loading = true;
@@ -80,7 +79,7 @@ const AuthenticationSlice = createSlice({
       .addCase(logOutService.rejected, (state, action) => {
         state.errOccurred = true;
         state.isSuccessful = false;
-        toast.error("an error occurred");
+        toast.error(action.payload);
       });
   },
 });

@@ -98,3 +98,42 @@ export const deleteDocuments = async (
     next(error);
   }
 };
+
+export const fetchAllContentVersion = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { docId } = req.params;
+    if (!docId) {
+      throw new CustomError({ message: "Failed", code: 400 });
+    }
+    const results = (await Document.fetchAllDocumentVersions(
+      parseInt(docId)
+    )) as any[];
+    if (!results) {
+      throw new CustomError({ message: "NOT FOUND", code: 404 });
+    }
+    const user = {
+      user_id: results[0].user_id,
+      username: results[0].username,
+    };
+
+    const document = {
+      doc_id: results[0].doc_id,
+      upload_date: results[0].upload_date,
+      name: results[0].name,
+    };
+
+    const versions = results.map((result: any) => ({
+      cont_id: result.cont_id,
+      text: result.text,
+      p_id: result.p_id,
+      date: result.date,
+    }));
+    res.status(200).json({ ...user, ...document, versions });
+  } catch (error) {
+    next(error);
+  }
+};

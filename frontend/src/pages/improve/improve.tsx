@@ -23,26 +23,28 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
 import {
-  fetchOriginalContent,
+  fetchContent,
   processContent,
   saveContent,
 } from "@/lib/thunks/content";
 
 const Enhance = () => {
   const dispatch = useAppDispatch();
-  const { originalContent, processedContent, loading } = useAppSelector(
+  const { content, processedContent, loading } = useAppSelector(
     (state) => state.Content
   );
 
+  console.log("this is the content", content);
+
   const { id } = useParams();
-  const [content, setContent] = useState("");
+  const [newContent, setContent] = useState("");
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (!id) {
       return;
     }
-    dispatch(fetchOriginalContent(parseInt(id)));
+    dispatch(fetchContent(parseInt(id)));
   }, []);
   useEffect(() => {
     if (processedContent !== "") {
@@ -53,9 +55,9 @@ const Enhance = () => {
   const handleEnhance = () => {
     dispatch(
       processContent({
-        content: originalContent.text,
-        id: originalContent.id,
-        document_id: originalContent.document_id,
+        content: content.text,
+        id: content.id,
+        document_id: content.doc_id,
       })
     );
   };
@@ -72,9 +74,9 @@ const Enhance = () => {
   const handleSave = async () => {
     const resultAction = dispatch(
       saveContent({
-        id: originalContent.id,
+        id: content.id,
         text: content,
-        document_id: originalContent.document_id,
+        document_id: content.doc_id,
       })
     );
     const result = await resultAction.unwrap();
@@ -110,7 +112,7 @@ const Enhance = () => {
                     <Textarea
                       id="message"
                       placeholder="original content should be shown here"
-                      defaultValue={originalContent?.text}
+                      defaultValue={content?.text}
                       className="h-full  border-0 p-3 shadow-none focus-visible:ring-0"
                     />
                   </div>
@@ -159,7 +161,7 @@ const Enhance = () => {
                       <ReactQuill
                         placeholder="You can Edit the document here..."
                         className="flex-1"
-                        value={content}
+                        value={newContent}
                         onChange={handleChange}
                       />
 

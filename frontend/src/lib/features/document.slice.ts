@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   uploadDocument,
-  fetchDocument,
   getAllDocuments,
+  getDocumentDetailsAndVersions,
 } from "../thunks/documents";
 import { DocumentsType } from "@/@types/documents";
 import { toast } from "react-toastify";
@@ -11,8 +11,8 @@ interface DocumentState {
   loading: boolean;
   errOccurred: boolean;
   message: string;
-
   documents: DocumentsType[];
+  document: [];
 }
 
 const initialState: DocumentState = {
@@ -20,6 +20,7 @@ const initialState: DocumentState = {
   errOccurred: false,
   message: "",
   documents: [],
+  document: [],
 };
 
 const DocumentsSlice = createSlice({
@@ -38,7 +39,8 @@ const DocumentsSlice = createSlice({
       .addCase(uploadDocument.rejected, (state, action) => {
         state.errOccurred = true;
         state.loading = false;
-        toast.error("an error occurred");
+
+        toast.error(action.payload);
       })
       .addCase(getAllDocuments.pending, (state) => {
         state.loading = true;
@@ -55,7 +57,21 @@ const DocumentsSlice = createSlice({
       .addCase(getAllDocuments.rejected, (state, action) => {
         state.errOccurred = true;
         state.loading = false;
-        toast.error("an error occurred");
+        toast.error(action.payload);
+      })
+      .addCase(getDocumentDetailsAndVersions.pending, (state) => {
+        state.loading = true;
+        state.errOccurred = false;
+      })
+      .addCase(getDocumentDetailsAndVersions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.document = action.payload;
+      })
+
+      .addCase(getDocumentDetailsAndVersions.rejected, (state, action) => {
+        state.errOccurred = true;
+        state.loading = false;
+        toast.error(action.payload);
       });
   },
 });

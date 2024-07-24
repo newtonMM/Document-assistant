@@ -109,15 +109,14 @@ export const deleteContent = createAsyncThunk<
 });
 
 export const fetchContent = createAsyncThunk<
-  string,
-  Payload,
+  ContentType,
+  number,
   { state: RootState; rejectValue: string }
->("content-get-service", async (payload, thunkAPI) => {
+>("content-get-service", async (id, thunkAPI) => {
   const abortController = new AbortController();
 
-  const response = await fetch(`${baseUrl}/content/${payload.id}`, {
+  const response = await fetch(`${baseUrl}/content/${id}`, {
     method: "GET",
-    body: JSON.stringify(payload),
     credentials: "include",
   });
   if (!response.ok) {
@@ -131,33 +130,7 @@ export const fetchContent = createAsyncThunk<
     return thunkAPI.rejectWithValue("empty response ");
   }
 
-  return data;
-});
-
-export const createContent = createAsyncThunk<
-  string,
-  Payload,
-  { state: RootState; rejectValue: string }
->("content-add-service", async (payload, thunkAPI) => {
-  const abortController = new AbortController();
-
-  const response = await fetch(`${baseUrl}/content`, {
-    method: "POST",
-    body: JSON.stringify(payload),
-    credentials: "include",
-  });
-  if (!response.ok) {
-    var respDetails = await response.json();
-    abortController.abort();
-    return thunkAPI.rejectWithValue(respDetails.message);
-  }
-  const data = await response.json();
-  if (!data) {
-    abortController.abort();
-    return thunkAPI.rejectWithValue("empty response ");
-  }
-
-  return data;
+  return data.content;
 });
 
 export const fetchOriginalContent = createAsyncThunk<
@@ -181,6 +154,5 @@ export const fetchOriginalContent = createAsyncThunk<
     abortController.abort();
     return thunkAPI.rejectWithValue("empty response ");
   }
-  console.log("this is the data", data);
   return data;
 });

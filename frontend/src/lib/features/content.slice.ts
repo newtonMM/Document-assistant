@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchOriginalContent, processContent } from "../thunks/content";
+import {
+  fetchOriginalContent,
+  processContent,
+  fetchContent,
+} from "../thunks/content";
 import { toast } from "react-toastify";
 
 import { ContentType } from "@/@types/content";
@@ -9,7 +13,7 @@ interface ContentState {
   errOccurred: boolean;
   message: string;
   userId: number | undefined;
-  originalContent: ContentType | undefined;
+  content: ContentType | undefined;
   processedContent: string;
 }
 
@@ -18,7 +22,7 @@ const initialState: ContentState = {
   errOccurred: false,
   message: "",
   userId: undefined,
-  originalContent: undefined,
+  content: undefined,
   processedContent: "",
 };
 
@@ -36,7 +40,7 @@ const Content = createSlice({
         fetchOriginalContent.fulfilled,
         (state, action: PayloadAction<ContentType>) => {
           state.loading = false;
-          state.originalContent = action.payload;
+          state.content = action.payload;
         }
       )
 
@@ -58,6 +62,20 @@ const Content = createSlice({
       )
 
       .addCase(processContent.rejected, (state, action) => {
+        state.errOccurred = true;
+        state.loading = false;
+        toast.error("an error occurred");
+      })
+      .addCase(fetchContent.pending, (state) => {
+        state.loading = true;
+        state.errOccurred = false;
+      })
+      .addCase(fetchContent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.content = action.payload;
+      })
+
+      .addCase(fetchContent.rejected, (state, action) => {
         state.errOccurred = true;
         state.loading = false;
         toast.error("an error occurred");

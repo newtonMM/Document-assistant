@@ -119,23 +119,3 @@ export const fetchOriginalDocument = async (
     next(error);
   }
 };
-
-export const fetchAllContentVersion = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { docId } = req.params;
-    if (!docId) {
-      throw new CustomError({ message: "Failed", code: 400 });
-    }
-    const document = await Content.fetchAllContentVersion(parseInt(docId));
-    if (!document) {
-      throw new CustomError({ message: "NOT FOUND", code: 404 });
-    }
-    res.status(200).json(document);
-  } catch (error) {
-    next(error);
-  }
-};

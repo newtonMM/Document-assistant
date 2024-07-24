@@ -26,27 +26,26 @@ const Navbar = () => {
     storeRef.current = makeStore();
   }
   const handleSignOut = async () => {
-    const resultAction = dispatch(logOutService());
+    dispatch(logOutService());
     const persistor = storeRef.current.__persistor;
-    const result = await resultAction.unwrap();
+
     /* 
     on successful logout we clear the persisted storage
     */
-    if (result) {
-      persistor.pause();
-      persistor
-        .flush()
-        .then(() => {
-          return persistor.purge();
-        })
-        .then(() => {
-          navigate("/login");
-        })
-        .catch((error: Error) => {
-          console.error("Logout error:", error);
-          navigate("/login");
-        });
-    }
+
+    persistor.pause();
+    persistor
+      .flush()
+      .then(() => {
+        return persistor.purge();
+      })
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error: Error) => {
+        console.error("Logout error:", error);
+        navigate("/login");
+      });
   };
   return (
     <div className="w-full">

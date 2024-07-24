@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Sparkles, Trash2 } from "lucide-react";
+import { Sparkles, Trash2, EyeIcon } from "lucide-react";
 import { getAllDocuments } from "@/lib/thunks/documents";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/hooks";
 import { DocumentsType } from "@/@types/documents";
@@ -53,7 +53,9 @@ const documents = () => {
                 documents.map((document: DocumentsType) => (
                   <TableRow>
                     <TableCell>
-                      <div className="font-medium">{document.name}</div>
+                      <div className="font-medium">
+                        {document?.name.split("-").pop()}
+                      </div>
                     </TableCell>
                     <TableCell className="">{document.status}</TableCell>
                     <TableCell className="">
@@ -64,11 +66,10 @@ const documents = () => {
                     </TableCell>
                     <TableCell className="">
                       <div className="flex gap-2 items-center">
-                        <Link to={`/dashboard/improve/${document.document_id}`}>
-                          <Sparkles className="h-6 w-6 cursor-pointer" />
-                        </Link>
-
                         <Trash2 className="h-6 w-6 cursor-pointer" />
+                        <Link to={`/dashboard/document/${document.id}`}>
+                          <EyeIcon className="h-6 w-6" />
+                        </Link>
                       </div>
                     </TableCell>
                   </TableRow>

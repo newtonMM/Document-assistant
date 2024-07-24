@@ -97,7 +97,9 @@ const Dashboard = () => {
                     documents.map((document: DocumentsType) => (
                       <TableRow>
                         <TableCell>
-                          <div className="font-medium">{document.name}</div>
+                          <div className="font-medium">
+                            {document.name.split("-").pop()}
+                          </div>
                         </TableCell>
                         <TableCell className="">{document.status}</TableCell>
                         <TableCell className="">
@@ -107,7 +109,7 @@ const Dashboard = () => {
                           {document.updated_at.slice(0, 16).replace("T", " ")}
                         </TableCell>
                         <TableCell className="">
-                          <Link to={`improve/${document.document_id}`}>
+                          <Link to={`document/${document.id}`}>
                             <Eye className="h-4 w-4 text-muted-foreground" />
                           </Link>
                         </TableCell>
